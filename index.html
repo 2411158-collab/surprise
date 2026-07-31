@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For My Girl ❤️ — The Full Surprise</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,500;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root{
+      --bg-1:#0f0826;--bg-2:#2b0b4a;--accent-1:#ff2b8a;--accent-2:#a86bff;--card:rgba(255,255,255,0.06);
+      --glass-border:rgba(255,255,255,0.09);--muted:rgba(255,255,255,0.75);--glass-blur:14px;--soft-white:#fff7fb;
+    }
+    html,body{height:100%;margin:0;font-family:'Montserrat',sans-serif;background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(255,43,138,0.06), transparent),
+      linear-gradient(180deg,var(--bg-1), var(--bg-2) 50%, #12021a 100%);color:var(--soft-white);-webkit-font-smoothing:antialiased;overflow:hidden;}
+    .screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s,visibility .45s}
+    .screen.active{opacity:1;visibility:visible;pointer-events:auto;z-index:30}
+    .glass-card{background:var(--card);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));border:1px solid var(--glass-border);border-radius:28px;padding:2.25rem;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);max-width:920px;width:92%}
+    .h1{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(2rem,4.6vw,4.25rem);line-height:0.95;margin:0;letter-spacing:0.02em;color:rgba(255,255,255,0.96);text-shadow:0 6px 30px rgba(168,107,255,0.08)}
+    .script{font-family:'Great Vibes',cursive;color:var(--accent-1);font-size:clamp(2rem,6vw,4.75rem);display:inline-block;line-height:1;text-shadow:0 4px 30px rgba(255,43,138,0.18)}
+    .lead{color:rgba(255,255,255,0.85);margin-top:.6rem;font-weight:300}
+    .btn-start{margin-top:1.25rem;padding:1rem 2.75rem;border-radius:999px;border:0;cursor:pointer;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:white;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));box-shadow:0 12px 40px rgba(168,107,255,0.12),0 6px 20px rgba(255,43,138,0.14);position:relative;overflow:hidden;transform:translateZ(0)}
+    .btn-start .spark{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 20% 10%, rgba(255,255,255,0.12), transparent 12%),radial-gradient(circle at 80% 90%, rgba(255,255,255,0.06), transparent 18%);mix-blend-mode:screen}
+    .search-pane{background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,250,252,0.96));color:#1f1233;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5vh}
+    .search-box{width:min(780px,92%);display:flex;align-items:center;background:linear-gradient(180deg,#fff,#fff);padding:.9rem 1.1rem;border-radius:999px;box-shadow:0 20px 40px rgba(9,10,13,0.06);border:1px solid rgba(10,8,20,0.04)}
+    .search-text{font-weight:700;color:#111827;font-size:1.125rem;min-height:1.2rem;margin-left:.8rem;border-right:3px solid var(--accent-1);padding-right:.6rem;animation:typingBlink .8s step-end infinite}
+    @keyframes typingBlink{50%{border-color:transparent}}
+    .search-btn{margin-left:1rem;border-radius:999px;border:0;background:var(--accent-1);color:white;padding:.65rem .85rem;display:flex;align-items:center;gap:.5rem;box-shadow:0 6px 20px rgba(255,43,138,0.14)}
+    .result-card{margin-top:2.25rem;background:linear-gradient(180deg,#fff,#fff);border-radius:20px;padding:1.25rem;width:min(820px,92%);display:flex;gap:1rem;align-items:center;box-shadow:0 20px 50px rgba(10,8,20,0.06);border:1px solid rgba(10,8,20,0.04);transform:translateY(20px);opacity:0}
+    .punchline{font-family:'Cinzel',serif;font-weight:800;text-transform:uppercase;color:#24102a;margin-top:2.25rem;position:relative;overflow:visible}
+    .box-wrapper{width:220px;height:220px;position:relative;perspective:1000px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .box-body{width:100%;height:100%;border-radius:26px;background:linear-gradient(135deg,#a86bff,#ff2b8a);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 40px rgba(0,0,0,0.5),inset 0 8px 40px rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.12)}
+    .box-lid{position:absolute;top:-26px;left:-6%;width:112%;height:66px;border-radius:16px;background:linear-gradient(135deg,#ffd6f0,#d9b6ff);box-shadow:0 12px 26px rgba(0,0,0,0.22);transform-origin:bottom center}
+    .final-bg{background:linear-gradient(180deg,rgba(255,240,249,0.06),rgba(255,245,250,0.02));width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .collage-area{position:relative;width:100%;height:100%;pointer-events:auto;display:block}
+    .polaroid-card{position:absolute;background:white;border-radius:10px;padding:10px;box-shadow:0 30px 60px rgba(10,8,20,0.12);cursor:pointer;width:220px;height:280px;transform-origin:center center;opacity:0;overflow:hidden;border:1px solid rgba(0,0,0,0.04)}
+    .polaroid-img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block;user-select:none}
+    .polaroid-text{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-weight:800;font-family:'Montserrat',sans-serif;color:#1b1030}
+    .sticker-badge{position:absolute;top:-12px;right:-12px;background:linear-gradient(180deg,var(--accent-1),var(--accent-2));color:white;padding:6px 12px;border-radius:20px;font-family:'Great Vibes',cursive;box-shadow:0 10px 30px rgba(168,107,255,0.12)}
+    #zoomOverlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(2,1,8,0.6),rgba(2,1,8,0.8));backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .35s}
+    #zoomOverlay.active{opacity:1;pointer-events:auto}
+    .close-zoom{position:fixed;top:18px;right:18px;background:rgba(255,255,255,0.08);color:white;border:0;padding:.5rem .75rem;border-radius:10px;z-index:120;backdrop-filter:blur(6px);cursor:pointer}
+    #btnReplay{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:120;opacity:0;transition:opacity .35s;border-radius:999px;padding:.6rem 1.1rem;background:white;color:var(--accent-1);font-weight:800;border:2px solid rgba(255,240,250,0.6)}
+    #sparkleCanvas{position:fixed;inset:0;pointer-events:none;z-index:10}
+    .nav { position:fixed; bottom:18px; right:18px; z-index:9999; display:flex; gap:12px; align-items:center; }
+    .nav button{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.06); color:var(--soft-white); padding:.6rem .9rem; border-radius:999px; cursor:pointer; font-weight:700 }
+    .progressBar{position:fixed;top:18px;left:50%;transform:translateX(-50%);height:6px;background:rgba(255,255,255,0.08);border-radius:999px;width:min(820px,90%);z-index:220;overflow:hidden}
+    .progressBar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));width:0%}
+    /* Slides specific */
+    .timeline{display:flex;gap:18px;align-items:flex-start;overflow:auto;padding:18px 8px;width:100%}
+    .memory-card{min-width:220px;background:linear-gradient(180deg,#fff,#fff);border-radius:16px;padding:12px;color:#24102a;box-shadow:0 16px 40px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04)}
+    .reasons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;width:100%}
+    .reason{background:linear-gradient(180deg,#fff,#fff);border-radius:14px;padding:12px;min-height:120px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px rgba(0,0,0,0.06);cursor:pointer}
+    .quiz{display:flex;flex-direction:column;gap:12px;width:100%;max-width:680px}
+    .audio-player{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#fff,#fff);padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.06)}
+    /* Make the play button clearly visible on the white audio card (override the page's light text color) */
+    .audio-player button { 
+      background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); 
+      color: #fff; 
+      border: 0; 
+      padding: .6rem .85rem; 
+      border-radius:10px; 
+      font-weight:800; 
+      cursor:pointer;
+      box-shadow:0 8px 24px rgba(168,107,255,0.12);
+    }
+    @media (max-width:768px){
+      .polaroid-card{width:150px;height:200px}
+      .box-wrapper{width:170px;height:170px}
+    }
+    /* small floating music button */
+    .music-btn { font-weight:800; padding:.5rem .7rem; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.06); cursor:pointer; color:var(--soft-white); }
+  </style>
+</head>
+<body>
+
+  <!-- decorative canvas -->
+  <canvas id="sparkleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Hidden screen-reader announcer (so we don't overwrite visible typing areas) -->
+  <div id="srAnnounce" aria-live="polite" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;"></div>
+
+  <!-- background music (replace src with your file) -->
+  <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+
+  <!-- PROGRESS -->
+  <div class="progressBar" aria-hidden="true"><i id="progressFill"></i></div>
+
+  <!-- NAV (single Next + music toggle) -->
+  <div class="nav" role="navigation" aria-label="Slide navigation">
+    <button id="btnMusic" class="music-btn" title="Play / Pause music" aria-label="Play or pause background music">♪</button>
+    <button id="btnNextSingle" title="Next" aria-label="Next slide">Next →</button>
+  </div>
+
+  <!-- SCREEN 1: Intro -->
+  <main id="screen1" class="screen active" role="main" aria-labelledby="titleIntro">
+    <div class="glass-card">
+      <div style="display:flex;align-items:center;gap:1rem;justify-content:center">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M12 21s-7-4.35-9-8.09C0.84 7.04 6.03 3 12 8c6-5 11.16-.96 9 4.91C19 16.65 12 21 12 21z" fill="url(#g)"></path>
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff2b8a" /><stop offset="1" stop-color="#a86bff" /></linearGradient></defs>
+        </svg>
+        <div style="text-align:left">
+          <div style="font-size:.85rem;color:rgba(255,255,255,0.85);text-transform:uppercase;letter-spacing:.18em;font-weight:700">💖 Something Made With Love</div>
+          <div id="titleIntro" class="h1" style="margin-top:.2rem">Hey,<span class="script">My Beautiful Girl 🌷</span></div>
+        </div>
+      </div>
+      <p class="lead" style="max-width:56ch;margin:1rem auto 0">Every click ahead holds a little memory, a little smile, and a piece of my heart. I hope this makes you smile the way you make me smile every day. 🤍</p>
+      <button id="btnStart" class="btn-start pop" aria-label="Open the surprise">
+        Unwrap the Love 💌
+        <span class="spark" aria-hidden="true"></span>
+      </button>
+    </div>
+  </main>
+
+  <!-- SCREEN 2: Search / reveal -->
+  <section id="screen2" class="screen" aria-hidden="true">
+    <div class="search-pane">
+      <div class="search-box" role="search" aria-label="Search mock">
+        <svg class="w-7 h-7 text-indigo-600" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <div id="typeText" class="search-text" aria-live="polite" aria-atomic="true"></div>
+        <button id="btnTriggerSearch" class="search-btn" aria-label="Reveal result" title="Tap to reveal">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span style="font-weight:700;font-size:.85rem">Find</span>
+        </button>
+      </div>
+
+      <div id="dateResult" class="result-card" role="status" aria-hidden="true" aria-live="polite">
+        <div style="min-width:96px;background:linear-gradient(180deg,#ffe7f8,#ffdff0);padding:.6rem;border-radius:12px;text-align:center;box-shadow:inset 0 6px 12px rgba(255,43,138,0.06)">
+          <div style="font-weight:800;color:#9b0656;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase">August</div>
+          <div style="font-weight:900;color:#2b0b4a;font-size:1.85rem;margin-top:.2rem">1</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:.75rem;color:#7a6a7f;font-weight:800;letter-spacing:.12em;text-transform:uppercase">Top Result</div>
+          <h3 style="margin:.4rem 0;font-weight:900;color:#24102a;font-size:1.6rem;line-height:1.05">National <span style="color:var(--accent-1)">Girlfriend Day</span></h3>
+          <div style="color:#5b4a5c;font-weight:600">Saturday, August 1, 2026</div>
+        </div>
+      </div>
+
+      <div class="punchline" aria-hidden="true" style="display:flex;flex-direction:column;gap:.65rem;align-items:center">
+        <div id="p1" style="opacity:0">IF I HAD TO <span class="badge">Choose</span></div>
+        <div id="p2" style="opacity:0">I'd celebrate you<span class="badge" style="background:linear-gradient(90deg,var(--accent-2),var(--accent-1));color:white"> every single day.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: Box -->
+  <section id="screen3" class="screen" aria-hidden="true">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:2rem">
+      <h3 id="boxHint" class="script" style="font-size:1.8rem;opacity:1">Tap to open...</h3>
+      <div id="theBox" class="box-wrapper" role="button" aria-label="Open the magical box" tabindex="0">
+        <div class="box-body"><span style="font-size:3.8rem;filter:drop-shadow(0 0 18px rgba(255,255,255,0.95))">💝</span></div>
+        <div class="box-lid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: Collage -->
+  <section id="screen4" class="screen" aria-hidden="true">
+    <div class="final-bg" style="width:100%;height:100%">
+      <h1 style="position:absolute;top:22px;left:0;right:0;text-align:center;font-family:'Great Vibes',cursive;color:var(--accent-1);font-size:clamp(2rem,5vw,3.8rem);z-index:80;text-shadow:0 6px 26px rgba(168,107,255,0.08)">Look at my Girlfriend! ✨</h1>
+      <div id="photoCanvas" class="collage-area" aria-live="polite" style="z-index:70"></div>
+      <div id="zoomOverlay" aria-hidden="true" tabindex="-1"></div>
+      <button id="closeZoom" class="close-zoom" style="display:none" aria-label="Close enlarged photo">Close ✕</button>
+      <button id="btnReplay">Play Again ↺</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 5: Memory Timeline -->
+  <section id="screen5" class="screen" aria-hidden="true">
+    <div class="glass-card" style="max-width:1100px;">
+      <h2 style="font-family:'Cinzel',serif;margin:0 0 8px 0">The Story I Never Want To Forget</h2>
+      <p style="margin:0 0 16px;color:rgba(255,255,255,0.85)">Every memory here reminds me how lucky I am to have you.</p>
+      <div class="timeline" id="timeline">
+        <!-- timeline cards inserted by JS -->
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;justify-content:center">
+        <button id="btnAddMemory" class="btn-start" style="padding:.55rem 1rem;font-size:.9rem">Add a memory (you can)</button>
+        <button id="btnShuffle" class="nav-btn" style="background:rgba(255,255,255,0.06);border-radius:999px;padding:.55rem 1rem">Shuffle</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 6: Reasons I Love You -->
+  <section id="screen6" class="screen" aria-hidden="true">
+    <div class="glass-card" style="max-width:1100px;">
+      <h2 style="font-family:'Cinzel',serif;margin:0 0 8px 0">Things You Probably Don't Even Notice About Yourself... But I Do.</h2>
+      <p style="margin:0 0 16px;color:rgba(255,255,255,0.85)">Tap to reveal — Some reasons are big. Most are beautifully ordinary.</p>
+      <div class="reasons-grid" id="reasonsGrid">
+        <!-- reason cards by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 7: Playful Quiz -->
+  <section id="screen7" class="screen" aria-hidden="true">
+    <div class="glass-card" style="max-width:780px;">
+      <h2 style="font-family:'Cinzel',serif;margin:0 0 8px 0">Mini Quiz — Pick Your Favorite</h2>
+      <p style="margin:0 0 12px;color:rgba(255,255,255,0.85)">Pick one and I'll tell you what it means about us ❤️</p>
+      <div class="quiz" id="quizArea">
+        <button class="nav-btn" data-choice="pic" style="padding:.9rem;border-radius:12px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:white">That Photo on the Pier</button>
+        <button class="nav-btn" data-choice="laugh" style="padding:.9rem;border-radius:12px;background:rgba(255,255,255,0.06);">The way you laugh</button>
+        <button class="nav-btn" data-choice="cook" style="padding:.9rem;border-radius:12px;background:rgba(255,255,255,0.06);">Your midnight cooking</button>
+        <div id="quizResult" style="margin-top:10px;min-height:56px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 8: Music + Note -->
+  <section id="screen8" class="screen" aria-hidden="true">
+    <div class="glass-card" style="max-width:900px">
+      <h2 style="font-family:'Cinzel',serif;margin:0 0 8px 0">Close Your Eyes & Press Play 🤍</h2>
+      <p style="margin:0 0 12px;color:rgba(255,255,255,0.85)">Press play — This song reminds me of us. Every lyric somehow feels a little more beautiful because of you.</p>
+      <div class="audio-player">
+        <button id="playBtn" aria-label="Play or pause">▶ Play</button>
+        <div style="flex:1">
+          <div style="font-weight:800">Sweet Little Melody</div>
+          <div style="font-size:.85rem;color:rgba(0,0,0,0.6)">by Me, for You</div>
+        </div>
+        <audio id="audio" src="music2.mp3"></audio>
+      </div>
+      <p style="margin-top:12px;color:rgba(255,255,255,0.85)">Below is a short love note.</p>
+      <div style="background:white;color:#24102a;padding:14px;border-radius:12px;margin-top:8px">
+        <em>"If one day someone asked me what happiness looked like, I don't think I'd show them a place. I'd simply show them you. Thank you for making ordinary days feel extraordinary. Happy Girlfriend's Day, my love. 🤍"</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 9: Finale & Share -->
+  <section id="screen9" class="screen" aria-hidden="true">
+    <div class="final-bg" style="width:100%;height:100%">
+      <div style="position:absolute;top:20%;left:50%;transform:translateX(-50%);text-align:center;z-index:90">
+        <h1 style="font-family:'Great Vibes',cursive;color:var(--accent-1);font-size:4rem;margin:0">All my love ✨</h1>
+        <p style="margin-top:8px;color:rgba(255,255,255,0.9)">Save, share, or replay — and always remember.</p>
+        <div style="margin-top:12px;display:flex;gap:12px;justify-content:center">
+          <button id="btnSave" class="btn-start" style="padding:.6rem 1rem">Save as Image</button>
+          <button id="btnShare" class="nav-btn" style="padding:.6rem 1rem">Share</button>
+        </div>
+      </div>
+      <button id="btnFinalReplay" class="btn-start" style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:100">Play Again ↺</button>
+    </div>
+  </section>
+
+  <script>
+    // Basic slide control
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    const total = screens.length;
+    let idx = 0;
+    const progressFill = document.getElementById('progressFill');
+    const btnNextSingle = document.getElementById('btnNextSingle');
+
+    function show(i){
+      if(i < 0) i = 0;
+      if(i >= total) i = total-1;
+      // animate hide/show
+      screens.forEach((s,sid)=> {
+        if(sid === i) s.classList.add('active'); else s.classList.remove('active');
+      });
+      idx = i;
+      const pct = Math.round(((idx)/(total-1))*100);
+      progressFill.style.width = pct + '%';
+      // announce to dedicated sr announcer (do not overwrite visible search typing)
+      setTimeout(()=> {
+        try{
+          const sr = document.getElementById('srAnnounce');
+          if(sr) sr.textContent = `Slide ${idx+1} of ${total}`;
+        }catch(e){}
+      }, 200);
+    }
+
+    btnNextSingle.addEventListener('click', () => show(idx+1));
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'ArrowRight') show(idx+1);
+      if(e.key === 'ArrowLeft') show(idx-1);
+    });
+
+    // Intro -> start
+    document.getElementById('btnStart').addEventListener('click', () => { show(1); startSearchAnimation(); });
+
+    // ---- Reuse previous collage logic (adapted) ----
+    const photoData = [
+      { url: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&q=80", caption: "My Fav ❤️", sticker:true },
+      { url: "https://images.unsplash.com/photo-1606122017369-d782bbb78f32?w=900&q=80", caption: "So Cute ✨", sticker:false },
+      { url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=80", caption: "Those Eyes 🥺", sticker:false },
+      { url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80", caption: "Gorgeous 🌸", sticker:false },
+      { url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=900&q=80", caption: "Mine forever 🔐", sticker:false },
+      { url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=80", caption: "Perfect. 💖", sticker:false }
+    ];
+
+    // Collage generator
+    function launchCollageIfNeeded(){
+      const canvas = document.getElementById('photoCanvas');
+      if(!canvas) return;
+      canvas.innerHTML = '';
+      const w = window.innerWidth, h = window.innerHeight;
+      const isMobile = w < 768;
+      const cardW = isMobile ? 150 : 220, cardH = isMobile ? 200 : 280;
+      const layouts = isMobile ? [
+        [-w*0.22,-h*0.20],[w*0.18,-h*0.14],[-w*0.28,0],[w*0.26,0],[-w*0.18,h*0.22],[w*0.18,h*0.28]
+      ] : [
+        [-w*0.34,-h*0.22],[ -w*0.06,-h*0.28 ], [ w*0.24,-h*0.22 ],
+        [-w*0.26,h*0.18], [0,h*0.28],[w*0.26,h*0.18]
+      ];
+      photoData.forEach((data,i) => {
+        const card = document.createElement('div');
+        card.className = 'polaroid-card';
+        card.style.width = cardW + 'px'; card.style.height = cardH + 'px';
+        card.style.left = `calc(50% - ${cardW/2}px)`; card.style.top = `calc(50% - ${cardH/2}px)`;
+        card.style.zIndex = 30 + i;
+        card.innerHTML = `<img class="polaroid-img" src="${data.url}" alt="${data.caption}" loading="lazy" draggable="false" /><div class="polaroid-text">${data.caption}</div>${data.sticker ? `<div class="sticker-badge">Take a look!! ✨</div>` : ''}`;
+        canvas.appendChild(card);
+        const targetX = layouts[i][0], targetY = layouts[i][1], rot = (Math.random()-0.5)*22;
+        card.dataset.origX = targetX; card.dataset.origY = targetY; card.dataset.origRot = rot;
+        gsap.fromTo(card,{x:0,y:0,scale:0.08,rotation:(Math.random()-0.5)*210},{x:targetX,y:targetY,rotation:rot,scale:1,opacity:1,duration:1.1,delay:i*0.08,ease:"back.out(1.2)", onComplete:()=>{
+          gsap.to(card,{y: targetY + (Math.random()*14-7), rotation: rot + (Math.random()*4-2), duration: Math.random()*2+2, yoyo:true,repeat:-1, ease:"sine.inOut"});
+        }});
+        // click zoom
+        card.addEventListener('click', ()=> toggleZoomCard(card));
+        // add subtle tilt
+        addTilt(card);
+      });
+      // confetti + hearts
+      shootConfetti();
+      createHearts();
+    }
+
+    let activeZoomCard = null;
+    function toggleZoomCard(card){
+      const overlay = document.getElementById('zoomOverlay');
+      const isMobile = window.innerWidth < 768;
+      if(activeZoomCard === card){
+        overlay.style.display = 'none';
+        gsap.to(card,{x:card.dataset.origX,y:card.dataset.origY,rotation:card.dataset.origRot,scale:1,duration:.45});
+        activeZoomCard = null;
+      } else {
+        if(activeZoomCard) gsap.to(activeZoomCard,{x:activeZoomCard.dataset.origX,y:activeZoomCard.dataset.origY,rotation:activeZoomCard.dataset.origRot,scale:1,duration:.35});
+        activeZoomCard = card;
+        overlay.style.display = 'block';
+        const scale = isMobile ? 1.5 : 2.0;
+        gsap.to(card,{x:0,y:0,rotation:0,scale:scale,duration:.5,ease:"back.out(1.2)",zIndex:200});
+      }
+    }
+
+    // tilt for cards
+    function addTilt(card){
+      let rect = null;
+      function onMove(e){
+        rect = rect || card.getBoundingClientRect();
+        const x = (e.clientX - (rect.left + rect.width/2)) / (rect.width/2);
+        const y = (e.clientY - (rect.top + rect.height/2)) / (rect.height/2);
+        const rx = -y * 6; const ry = x * 8;
+        gsap.to(card, {rotationX: rx, rotationY: ry, duration:0.35, transformOrigin:'center', ease:'power3.out', overwrite:true});
+      }
+      function onLeave(){ gsap.to(card, {rotationX:0, rotationY:0, duration:.5, ease:'power3.out'}); rect = null; }
+      card.addEventListener('pointermove', onMove);
+      card.addEventListener('pointerleave', onLeave);
+      card.addEventListener('pointercancel', onLeave);
+    }
+
+    // ---- Search animation (adapted) ----
+    function startSearchAnimation(){
+      const typeText = document.getElementById('typeText'); typeText.textContent = '';
+      const query = "What is tomorrow?";
+      let i=0;
+      gsap.set('#btnTriggerSearch',{opacity:0, pointerEvents:'none', scale:.96});
+      const pulse = gsap.to('#btnTriggerSearch',{scale:1.06,repeat:-1,yoyo:true,duration:.9,ease:"sine.inOut", paused:true});
+      function typeChar(){ if(i < query.length){ typeText.textContent += query[i++]; setTimeout(typeChar, Math.random()*70+45); } else { gsap.to('#btnTriggerSearch',{opacity:1,duration:.35, pointerEvents:'auto', scale:1}); pulse.play(); } }
+      typeChar();
+      // add click
+      const onClick = () => { document.getElementById('btnTriggerSearch').removeEventListener('click', onClick); pulse.kill(); gsap.to('#btnTriggerSearch',{scale:.9,opacity:0,duration:.26}); finishSearch(); }
+      document.getElementById('btnTriggerSearch').addEventListener('click', onClick);
+    }
+    function finishSearch(){
+      gsap.to('.search-box',{y:-30,scale:.98,duration:.45});
+      gsap.to(document.getElementById('dateResult'),{opacity:1,y:0,duration:.6,delay:.2});
+      // make timeline faster and ensure p2 shows before navigation
+      const tl = gsap.timeline({delay:0.6});
+      tl.to('#p1',{opacity:1,scale:1.03,duration:.08})
+        .to('#p1',{scale:1,duration:.18})
+        .to('#p1',{opacity:0,scale:.92,duration:.18,delay:.45})
+        .to('#p2',{opacity:1,scale:1.03,duration:.12});
+      // show the BOX slide (screen3) after the punchline finishes (safe margin)
+      setTimeout(()=> show(2), 2200);
+      // do not auto-launch collage here; wait for the box to be opened by user
+    }
+
+    // ---- Confetti & hearts ----
+    function shootConfetti(){
+      const duration = 2.8 * 1000, end = Date.now() + duration;
+      const defaults = {startVelocity:40,spread:360,ticks:60,zIndex:9999};
+      const colors = ['#ff2b8a','#ffffff','#a86bff','#ffd6f0'];
+      const interval = setInterval(()=> {
+        const timeLeft = end - Date.now();
+        if(timeLeft <= 0) return clearInterval(interval);
+        const particleCount = 40 * (timeLeft/duration);
+        confetti(Object.assign({},defaults,{particleCount, origin:{x:Math.random()*0.4+0.05, y:Math.random()*0.2}, colors}));
+        confetti(Object.assign({},defaults,{particleCount, origin:{x:Math.random()*0.4+0.6, y:Math.random()*0.2}, colors}));
+      }, 220);
+    }
+    function createHearts(){
+      // small floating hearts appended to body
+      const existing = document.querySelectorAll('.floating-heart'); existing.forEach(n=>n.remove());
+      for(let i=0;i<14;i++){
+        const el = document.createElement('div'); el.className='floating-heart'; el.style.position='fixed'; el.style.zIndex='20'; el.style.pointerEvents='none';
+        el.innerText='❤'; const size = Math.random()*1.8+0.8; el.style.fontSize=(18*size)+'px'; el.style.left=(Math.random()*100)+'vw'; el.style.top=(Math.random()*100)+'vh'; el.style.opacity=(Math.random()*0.5)+0.2; document.body.appendChild(el);
+        gsap.to(el,{y:'-=' + (200 + Math.random()*200), x: '+=' + ((Math.random()-0.5)*120), opacity:0, duration: 4+Math.random()*4, repeat:-1, delay:Math.random()*2, ease:'linear'});
+      }
+    }
+
+    // ---- Timeline content (screen5) ----
+    const memories = [
+      {title:'The Day We Started Talking 💬', date:'2023-02-14', img:'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=600&q=80', note:'I had no idea that one conversation would become my favourite part of every day.'},
+      {title:'That First Long Conversation', date:'2023-06-03', img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80', note:'Hours passed like minutes, and somehow talking to you started feeling like home.'},
+      {title:'The Night I Realised', date:'2024-01-10', img:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80', note:'Somewhere between our conversations... I fell in love with you'},
+      {title:'Us', date:'2025-05-05', img:'https://images.unsplash.com/photo-1504198458649-3128b932f49f?w=600&q=80', note:'Maybe we are not perfect, but you are my favourite chapter.'},
+      {title:'Coming Soon... 🤍', date:'2025-05-05', img:'https://images.unsplash.com/photo-1504198458649-3128b932f49f?w=600&q=80', note:'Maybe we are not perfect, but you are my favourite chapter.'},
+    ];
+    function renderTimeline(){
+      const el = document.getElementById('timeline');
+      el.innerHTML = '';
+      memories.forEach(m=>{
+        const card = document.createElement('div'); card.className='memory-card';
+        card.innerHTML = `<img src="${m.img}" style="width:100%;border-radius:10px;height:120px;object-fit:cover;margin-bottom:8px" alt="${m.title}" loading="lazy"/><div style="font-weight:800">${m.title}</div><div style="font-size:.9rem;color:#6b5677">${new Date(m.date).toDateString()}</div><div style="margin-top:6px;color:#51314f">${m.note}</div>`;
+        el.appendChild(card);
+      });
+    }
+    document.getElementById('btnShuffle').addEventListener('click', ()=>{ memories.sort(()=>Math.random()-0.5); renderTimeline(); });
+    document.getElementById('btnAddMemory').addEventListener('click', ()=> {
+      const title = prompt('Memory title') || 'New Memory';
+      const note = prompt('Short note') || 'A new little moment';
+      const date = new Date().toISOString().slice(0,10);
+      memories.unshift({title, date, img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80', note});
+      renderTimeline();
+    });
+
+    // ---- Reasons grid (screen6) ----
+    const reasons = [
+      "You make me laugh", "Your kindness", "How you listen", "Your morning smile",
+      "Our secret jokes", "You believe in me", "Your little dance", "Your courage"
+    ];
+    function renderReasons(){
+      const g = document.getElementById('reasonsGrid'); g.innerHTML='';
+      reasons.forEach((r,i)=>{
+        const d = document.createElement('div'); d.className='reason'; d.innerHTML = `<div style="text-align:center;font-weight:800;color:#24102a">${i+1}. <span style="display:block;margin-top:6px">${r.split(' ').slice(0,3).join(' ')}...</span></div>`;
+        // reveal on click
+        d.addEventListener('click', ()=> {
+          gsap.to(d,{scale:0.96,duration:0.08, yoyo:true, repeat:1});
+          d.innerHTML = `<div style="text-align:center;font-weight:900;color:#24102a">${r}</div>`;
+        });
+        g.appendChild(d);
+      });
+    }
+
+    // ---- Quiz (screen7) ----
+    document.querySelectorAll('#quizArea .nav-btn').forEach(b=>{
+      b.addEventListener('click', (e)=> {
+        const choice = e.currentTarget.dataset.choice;
+        const res = document.getElementById('quizResult');
+        let html = '';
+        if(choice === 'pic') html = '<div style="background:white;color:#24102a;padding:10px;border-radius:8px">You pick the Pier photo — means we treasure quiet perfect nights together.</div>';
+        if(choice === 'laugh') html = '<div style="background:white;color:#24102a;padding:10px;border-radius:8px">You pick the laugh — means you bring light everywhere you go.</div>';
+        if(choice === 'cook') html = '<div style="background:white;color:#24102a;padding:10px;border-radius:8px">You pick midnight cooking — means we enjoy messy, cozy moments.</div>';
+        res.innerHTML = html;
+      });
+    });
+
+    // ---- Music (screen8 & background) ----
+    const audio = document.getElementById('audio'), playBtn = document.getElementById('playBtn');
+    playBtn.addEventListener('click', ()=>{
+      if(audio.paused){ audio.play(); playBtn.textContent='⏸ Pause'; } else { audio.pause(); playBtn.textContent='▶ Play'; }
+    });
+    audio.addEventListener('ended', ()=> playBtn.textContent='▶ Play');
+
+    // background music toggle
+    const bgm = document.getElementById('bgm'), btnMusic = document.getElementById('btnMusic');
+    let bgmPlaying = false;
+    btnMusic.addEventListener('click', async ()=>{
+      try{
+        if(!bgmPlaying){
+          await bgm.play();
+          btnMusic.textContent = '♫';
+          bgmPlaying = true;
+        } else {
+          bgm.pause();
+          btnMusic.textContent = '♪';
+          bgmPlaying = false;
+        }
+      }catch(e){
+        // autoplay might be blocked - change UI but don't throw
+        bgmPlaying = !bgmPlaying;
+      }
+    });
+
+    // ---- Save & Share (screen9) ----
+    document.getElementById('btnShare').addEventListener('click', async () => {
+      const shareData = { title: 'A little surprise for you 🌸', text: 'I made this for you', url: location.href };
+      try {
+        if(navigator.share) { await navigator.share(shareData); }
+        else { alert('Sharing not supported on this device. You can copy the URL.'); navigator.clipboard.writeText(location.href); }
+      } catch(e){ console.log(e); }
+    });
+    document.getElementById('btnSave').addEventListener('click', ()=> {
+      // Generate a simple image of the current collage using html2canvas would be ideal,
+      // but to keep the page local-only we create a small fallback: capture using SVG export is complex.
+      alert('To save as an image: take a screenshot on your device (recommended) — or I can integrate html2canvas if you want.');
+    });
+
+    // Final replay
+    document.getElementById('btnFinalReplay').addEventListener('click', ()=> { show(0); });
+
+    // ---- Sparkle canvas (lightweight) ----
+    (function sparkleCanvasInit(){
+      const canvas = document.getElementById('sparkleCanvas'); if(!canvas) return;
+      const ctx = canvas.getContext('2d'); let w=canvas.width=innerWidth, h=canvas.height=innerHeight;
+      window.addEventListener('resize', ()=>{ w=canvas.width=innerWidth; h=canvas.height=innerHeight; });
+      const particles = [];
+      for(let i=0;i<60;i++) particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.6+0.6,vx:(Math.random()-0.5)*0.25,vy:-0.02-Math.random()*0.25,life:Math.random()*80+60,alpha:Math.random()*0.6+0.1,hue:320+Math.random()*40});
+      function frame(){
+        ctx.clearRect(0,0,w,h);
+        particles.forEach(p=>{
+          p.x += p.vx; p.y += p.vy; p.life--;
+          if(p.life < 0 || p.y < -30 || p.x < -30 || p.x > w+30){ p.x = Math.random()*w; p.y = h + 20; p.life = Math.random()*120+40; }
+          ctx.beginPath();
+          const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
+          g.addColorStop(0, `hsla(${p.hue},100%,70%,${p.alpha})`);
+          g.addColorStop(0.4, `hsla(${p.hue},90%,65%,${p.alpha*0.3})`);
+          g.addColorStop(1, `rgba(255,255,255,0)`);
+          ctx.fillStyle = g; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+        });
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+
+    // ---- Box open interaction ----
+    const theBox = document.getElementById('theBox');
+    const boxLid = theBox.querySelector('.box-lid');
+    function openBox(){
+      if(theBox.classList.contains('opened')) return;
+      theBox.classList.add('opened');
+      gsap.to(boxLid,{rotationX:-85,y:-140,duration:.9, transformOrigin:'bottom center', ease:'power3.out'});
+      gsap.fromTo('.box-body',{scale:1},{scale:0.98,duration:.35,yoyo:true,repeat:1});
+      // after lid animation show collage slide and generate collage
+      setTimeout(()=> {
+        show(3); // screen4 (collage)
+        launchCollageIfNeeded();
+      }, 900);
+    }
+    theBox.addEventListener('click', openBox);
+    theBox.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBox(); } });
+
+    // ---- init visuals & screen behaviors ----
+    show(0);
+    renderTimeline();
+    renderReasons();
+
+    // When the collage slide becomes visible, ensure collage is generated
+    // use a small observer to detect when screen4 is active
+    const observer = new MutationObserver(()=> {
+      if(screens[3].classList.contains('active')) launchCollageIfNeeded();
+    });
+    observer.observe(screens[3], { attributes: true, attributeFilter: ['class']});
+
+  </script>
+</body>
+</html>
